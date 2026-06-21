@@ -1,55 +1,96 @@
+const projectsFolder = [
+    {
+        name: "3x3_Macropad_Schematic",
+        category: "Hardware",
+        extension: ".md"
+    },
+    {
+        name: "Privilege_Escalation_Notes",
+        category: "Cybersecurity",
+        extension: ".md"
+    },
+    {
+        name: "Ghazal_Draft_01",
+        category: "Creative Writing",
+        extension: ".md"
+    }
+];
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Document is ready!");
+    
+    const welcomeDiv = document.getElementById("welcome");
+    welcomeDiv.style.position = "absolute";
+    
+    makeDraggable(welcomeDiv);
+
+    const testWindow = document.getElementById("projects-window");
+    if (testWindow) {
+        testWindow.style.display = "block"; 
+        makeDraggable(testWindow);
+        createFiles(projectsFolder);
+    }
+
+    setInterval(updateTime, 1000);
 });
 
-function updateTime() {
-    var currentTime = new Date().toLocaleString();
-    var timeText = document.querySelector("#timeElement");
-    timeText.innerHTML = currentTime;
+function createFiles(array) {
+    const contentContainer = document.getElementById("projects-content");
+    contentContainer.innerHTML = ""; 
+
+    array.forEach(function(file) { 
+        const rowHTML = `
+            <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid black;">
+                <span>📄 ${file.name}${file.extension}</span>
+                <span>${file.category}</span>
+            </div>
+        `;
+        contentContainer.innerHTML += rowHTML;
+    });
 }
 
-setInterval(updateTime, 1000);
+function makeDraggable(element) {
+    let initialX = 0, initialY = 0;
+    
+    const header = document.getElementById(element.id + "-header");
+    if (header) {
+        header.onmousedown = dragMouseDown;
+    } else {
+        element.onmousedown = dragMouseDown;
+    }
 
-dragElement(document.getElementById("welcome"));
+    function dragMouseDown(e) {
+        e.preventDefault();
+        initialX = e.clientX;
+        initialY = e.clientY;
+        
+        document.onmouseup = stopDragging;
+        document.onmousemove = elementDrag;
+    }
 
-function dragElement(element) {
-    var initialX = 0;
-    var initialY = 0;
-    var currentX = 0;
-    var currentY = 0;
+    function elementDrag(e) {
+        e.preventDefault();
+        
+        const deltaX = initialX - e.clientX;
+        const deltaY = initialY - e.clientY;
+        
+        
+        element.style.top = (element.offsetTop - deltaY) + "px";
+        element.style.left = (element.offsetLeft - deltaX) + "px";
+        
+        
+        initialX = e.clientX;
+        initialY = e.clientY;
+    }
 
-    if (document.getElementById(element.id + "header")) {
-        document.getElementById(element.id + "header").onmousedown = startDragging;
-    }else {
-        element.onmousedown = startDragging;
+    function stopDragging() {
+        document.onmouseup = null;
+        document.onmousemove = null;
     }
 }
 
-function startDragging(e) {
-    e = e || window.event;
-    e.preventDefault();
-
-    initialX = e.clientX;
-    initialY = e.clientY;
-
-    document.onmouseup = stopDragging;
-    document.onmousemove = dragElement;
-}
-
-function dragElement(e) {
-    e = e || window.event;
-    e.preventDefault();
-
-    currentX = initialX - e.clientX;
-    currentY = initialY - e.clientY;
-    initialX = e.clientX;
-    initialY = e.clientY;
-
-    element.style.top = (element.offsetTop - currentY) + "px";
-    element.style.left = (element.offsetLeft - currentX) + "px";
-}
-
-function stopDragging() {
-    document.onmouseup = null;
-    document.onmousemove = null;
+function updateTime() {
+    const timeText = document.querySelector("#time-element");
+    if(timeText) {
+        timeText.innerHTML = new Date().toLocaleString();
+    }
 }

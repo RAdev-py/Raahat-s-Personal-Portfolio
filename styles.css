@@ -1,0 +1,109 @@
+body {
+    background-image: url(./nature.png); 
+    background-size: cover; 
+    height: 100vh; 
+    margin: 0; 
+    overflow: hidden;
+}
+
+.os-top-bar {
+    position: absolute; 
+    width: 100%; 
+    backdrop-filter: blur(10px); 
+    background-color: rgba(200, 200, 200, 0.25); 
+    color: #fff; 
+    display: flex; 
+    justify-content: space-between; 
+    z-index: 1000;
+    padding: 0 16px;
+}
+
+#desktop {
+    position: absolute; 
+    top: 60px; 
+    left: 20px; 
+    color: white;
+}
+
+.folder-icon{
+    cursor: pointer; 
+    text-align: center; 
+    margin-bottom: 20px;
+    font-size: 40px;
+}
+
+#projects-window{
+    display: none; 
+    position: absolute; 
+    top: 100px; 
+    left: 200px; 
+    width: 400px; 
+    background-color: #fff; 
+    color: #000; 
+    border: 2px solid #333; 
+    border-radius: 8px; 
+    z-index: 10; 
+    font-family: sans-serif;
+}
+
+#projects-window-header{
+    background-color: #ddd; 
+    padding: 8px; 
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #333;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#projects-content{
+    padding: 10px; 
+    min-height: 200px;
+}
+
+#welcome {
+    border: solid;
+    background-color: white;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#welcome-header{
+    background-color: lightgray;
+    margin: 0;
+    padding: 5px;
+
+}
+
+.center-modal {
+    border: solid; 
+    background-color: white; 
+    width: fit-content; 
+    border-radius: 16px; 
+    padding: 16px; 
+    /* The centering magic */
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+}
+
+.modal-image {
+    border-radius: 16px; 
+    max-width: 300px;
+}
+
+/* Utility Classes */
+.text-bold {
+    font-weight: bold;
+}
+
+.content-padding {
+    padding: 10px;
+}
