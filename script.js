@@ -6,25 +6,30 @@ const fileSystem = {
     hardware: [
         { name: "PCB_Traces_V2", category: "Engineering", extension: ".kicad_pcb" },
         { name: "Bill_of_Materials", category: "Planning", extension: ".csv" }
+    ],
+    roblox: [
+        { name: "Backflip", category: "Animation", extension: ".mov" },
+        { name: "Haunted_House", category: "Build", extension: ".rblx" }
+    ],
+    Zayd: [
+        { name: "Backflip", category: "Animation", extension: ".mov" },
+        { name: "Haunted_House", category: "Build", extension: ".rblx" }
     ]
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // const welcomeDiv = document.getElementById("welcome");
-    // welcomeDiv.style.position = "absolute";
-    
-    // makeDraggable(welcomeDiv);
-
     const testWindow = document.getElementById("projects-window");
     
-    setupFolders();
+    createFolders();
 
     setInterval(updateTime, 1000);
 });
 
-function createFiles(array) {
-    const contentContainer = document.getElementById("projects-content");
+function createFiles(element, array) {
+    const contentContainer = element.querySelector(".content-container")
+    
+    if (!contentContainer) return;
+
     contentContainer.innerHTML = ""; 
 
     array.forEach(function(file) { 
@@ -35,13 +40,13 @@ function createFiles(array) {
             </div>
         `;
         contentContainer.innerHTML += rowHTML;
-    });
+    })
 }
 
 function makeDraggable(element) {
     let initialX = 0, initialY = 0;
     
-    const header = document.getElementById(element.id + "-header");
+    const header = element.querySelector(".window-header");
     if (header) {
         header.onmousedown = dragMouseDown;
     } else {
@@ -85,22 +90,51 @@ function updateTime() {
     }
 }
 
+function createFolders() {
+    const desktop = document.querySelector(".desktop");
+    if (!desktop) return;
+
+    const folderNames = Object.keys(fileSystem);
+
+    folderNames.forEach((name) => {
+        const folderHTML = `
+            <div class="folder-icon" id="${name}">
+                <div>📁</div>
+                <span>${name.charAt(0).toUpperCase() + name.slice(1)}</span>
+            </div>
+        `;
+        desktop.innerHTML += folderHTML;
+    });
+    setupFolders();
+}
+
 function setupFolders() {
-    const folder = document.querySelector(".folder-icon");
-    if (folder) {
-        const projectsWindow = document.getElementById("projects-window");
+    const folders = document.querySelectorAll(".folder-icon");
+
+    folders.forEach((folder) => {
         folder.addEventListener("dblclick", () => {
-            if (projectsWindow) {
-                projectsWindow.style.display = "block";
-                makeDraggable(projectsWindow);
-                createFiles(projectsFolder);
+            
+            const newID = folder.id + "-window";
+            if (!document.getElementById(newID)) {
+                const temp = document.querySelector(".window-template");
+                const clon = temp.content.cloneNode(true).firstElementChild;
+
+                clon.id = newID;
+                clon.style.display = "block";
+                const path = clon.querySelector(".text-bold");
+                path.innerHTML = "/home/" + folder.id;
+                document.body.appendChild(clon);
+
+                createFiles(clon, fileSystem[folder.id]);
+                makeDraggable(clon);
+                
+                const closeBtn = clon.querySelector("#close-window-button");
+                if (closeBtn) {
+                    closeBtn.addEventListener("click", () => {
+                        clon.remove();
+                    });
+                }
             }
         });
-        const button = document.getElementById("close-window-button");
-        if (button) {
-            button.addEventListener("click", () => {
-                projectsWindow.style.display = "none";
-            });
-        }
-    }
+    });
 }

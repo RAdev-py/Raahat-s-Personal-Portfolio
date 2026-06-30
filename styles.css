@@ -18,7 +18,7 @@ body {
     padding: 0 16px;
 }
 
-#desktop {
+.desktop {
     position: absolute; 
     top: 60px; 
     left: 20px; 
@@ -32,7 +32,7 @@ body {
     font-size: 40px;
 }
 
-#projects-window{
+.window-container{
     display: none; 
     position: absolute; 
     top: 100px; 
@@ -46,7 +46,7 @@ body {
     font-family: sans-serif;
 }
 
-#projects-window-header{
+.window-header{
     background-color: #ddd; 
     padding: 8px; 
     cursor: move;
@@ -57,7 +57,7 @@ body {
     border-top-right-radius: 6px;
 }
 
-#projects-content{
+.content-container{
     padding: 10px; 
     min-height: 200px;
 }
