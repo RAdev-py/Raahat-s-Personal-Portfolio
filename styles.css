@@ -107,3 +107,9 @@ body {
 .content-padding {
     padding: 10px;
 }
+
+.window-buttons {
+    display: flex;
+    gap: 4px;
+    cursor: pointer;
+}

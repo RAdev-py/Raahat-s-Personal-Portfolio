@@ -1,34 +1,24 @@
-const projectsFolder = [
-    {
-        name: "3x3_Macropad_Schematic",
-        category: "Hardware",
-        extension: ".md"
-    },
-    {
-        name: "Privilege_Escalation_Notes",
-        category: "Cybersecurity",
-        extension: ".md"
-    },
-    {
-        name: "Ghazal_Draft_01",
-        category: "Creative Writing",
-        extension: ".md"
-    }
-];
+const fileSystem = {
+    projects: [
+        { name: "3x3_Macropad_Schematic", category: "Hardware", extension: ".md" },
+        { name: "Privilege_Escalation_Notes", category: "Cybersecurity", extension: ".md" }
+    ],
+    hardware: [
+        { name: "PCB_Traces_V2", category: "Engineering", extension: ".kicad_pcb" },
+        { name: "Bill_of_Materials", category: "Planning", extension: ".csv" }
+    ]
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const welcomeDiv = document.getElementById("welcome");
-    welcomeDiv.style.position = "absolute";
+    // const welcomeDiv = document.getElementById("welcome");
+    // welcomeDiv.style.position = "absolute";
     
-    makeDraggable(welcomeDiv);
+    // makeDraggable(welcomeDiv);
 
     const testWindow = document.getElementById("projects-window");
-    if (testWindow) {
-        testWindow.style.display = "block"; 
-        makeDraggable(testWindow);
-        createFiles(projectsFolder);
-    }
+    
+    setupFolders();
 
     setInterval(updateTime, 1000);
 });
@@ -62,7 +52,7 @@ function makeDraggable(element) {
         e.preventDefault();
         initialX = e.clientX;
         initialY = e.clientY;
-        
+            
         document.onmouseup = stopDragging;
         document.onmousemove = elementDrag;
     }
@@ -92,5 +82,25 @@ function updateTime() {
     const timeText = document.querySelector("#time-element");
     if(timeText) {
         timeText.innerHTML = new Date().toLocaleString();
+    }
+}
+
+function setupFolders() {
+    const folder = document.querySelector(".folder-icon");
+    if (folder) {
+        const projectsWindow = document.getElementById("projects-window");
+        folder.addEventListener("dblclick", () => {
+            if (projectsWindow) {
+                projectsWindow.style.display = "block";
+                makeDraggable(projectsWindow);
+                createFiles(projectsFolder);
+            }
+        });
+        const button = document.getElementById("close-window-button");
+        if (button) {
+            button.addEventListener("click", () => {
+                projectsWindow.style.display = "none";
+            });
+        }
     }
 }
