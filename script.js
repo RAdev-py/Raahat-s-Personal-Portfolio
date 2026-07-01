@@ -2,8 +2,8 @@ let highestZ = 10;
 
 const fileSystem = {
     projects: [
-        { name: "3x3_Macropad_Schematic", category: "Hardware", extension: ".md" },
-        { name: "Privilege_Escalation_Notes", category: "Cybersecurity", extension: ".md" }
+        { name: "3x3_Macropad_Schematic", category: "Hardware", extension: ".md", url: "./macropad.html" },
+        { name: "Privilege_Escalation_Notes", category: "Cybersecurity", extension: ".md", url:"./priv_esc.html" }
     ],
     hardware: [
         { name: "PCB_Traces_V2", category: "Engineering", extension: ".kicad_pcb" },
@@ -28,21 +28,49 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function createFiles(element, array) {
-    const contentContainer = element.querySelector(".content-container")
-    
+    const contentContainer = element.querySelector(".content-container");
     if (!contentContainer) return;
 
     contentContainer.innerHTML = ""; 
 
-    array.forEach(function(file) { 
-        const rowHTML = `
-            <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid black;">
-                <span>📄 ${file.name}${file.extension}</span>
-                <span>${file.category}</span>
-            </div>
+    array.forEach((file) => { 
+        const fileRow = document.createElement("div");
+        fileRow.style.cssText = "display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid black; cursor: pointer;";
+        
+        fileRow.innerHTML = `
+            <span>📄 ${file.name}${file.extension}</span>
+            <span>${file.category}</span>
         `;
-        contentContainer.innerHTML += rowHTML;
-    })
+
+        fileRow.addEventListener("mouseover", () => fileRow.style.backgroundColor = "#eee");
+        fileRow.addEventListener("mouseout", () => fileRow.style.backgroundColor = "transparent");
+
+        fileRow.addEventListener("dblclick", () => {
+            const newID = file.name + "-app";
+            if (document.getElementById(newID)) return;
+
+            const temp = document.querySelector(".app-template");
+            const clon = temp.content.cloneNode(true).firstElementChild;
+
+            clon.id = newID;
+            clon.style.display = "block";
+            highestZ ++;
+            clon.style.zIndex = highestZ;
+            
+            clon.querySelector(".app-title").textContent = file.name;
+            clon.querySelector(".app-iframe").src = file.url;
+
+            document.body.appendChild(clon);
+            centerWindow(clon); 
+            makeDraggable(clon);
+            
+            const closeBtn = clon.querySelector(".close-window-button");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", () => clon.remove());
+            }
+        });
+        contentContainer.appendChild(fileRow);
+    });
 }
 
 function makeDraggable(element) {
@@ -68,9 +96,6 @@ function makeDraggable(element) {
         e.preventDefault();
         initialX = e.clientX;
         initialY = e.clientY;
-
-        // highestZ ++;
-        // element.style.zIndex = highestZ;
         
         document.onmouseup = stopDragging;
         document.onmousemove = elementDrag;
@@ -94,7 +119,6 @@ function makeDraggable(element) {
     function stopDragging() {
         document.onmouseup = null;
         document.onmousemove = null;
-        e.style.zIndex = "99";
     }
 }
 
@@ -130,26 +154,45 @@ function setupFolders() {
         folder.addEventListener("dblclick", () => {
             
             const newID = folder.id + "-window";
-            if (!document.getElementById(newID)) {
-                const temp = document.querySelector(".window-template");
-                const clon = temp.content.cloneNode(true).firstElementChild;
+            if (document.getElementById(newID)) return;
+            const temp = document.querySelector(".window-template");
+            const clon = temp.content.cloneNode(true).firstElementChild;
 
-                clon.id = newID;
-                clon.style.display = "block";
-                const path = clon.querySelector(".text-bold");
-                path.innerHTML = "/home/" + folder.id;
-                document.body.appendChild(clon);
+            highestZ ++;
+            clon.style.zIndex = highestZ;
 
-                createFiles(clon, fileSystem[folder.id]);
-                makeDraggable(clon);
-                
-                const closeBtn = clon.querySelector("#close-window-button");
-                if (closeBtn) {
-                    closeBtn.addEventListener("click", () => {
-                        clon.remove();
-                    });
-                }
+            clon.id = newID;
+            clon.style.display = "block";
+            const path = clon.querySelector(".text-bold");
+            path.innerHTML = "/home/" + folder.id;
+            document.body.appendChild(clon);
+
+            createFiles(clon, fileSystem[folder.id]);
+            centerWindow(clon); 
+            makeDraggable(clon);
+            
+            const closeBtn = clon.querySelector(".close-window-button");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", () => {
+                    clon.remove();
+                });
             }
+            
         });
     });
+}
+
+function centerWindow(element) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    const windowWidth = element.offsetWidth || 400;
+    const windowHeight = element.offsetHeight || 300;
+
+    const centerX = (viewportWidth / 2) - (windowWidth / 2);
+    const centerY = (viewportHeight / 2) - (windowHeight / 2);
+
+    const randomOffset = Math.floor(Math.random() * 30);
+    element.style.left = (centerX + randomOffset) + "px";
+    element.style.top = (centerY + randomOffset) + "px";
 }
