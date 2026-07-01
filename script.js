@@ -1,3 +1,5 @@
+let highestZ = 10;
+
 const fileSystem = {
     projects: [
         { name: "3x3_Macropad_Schematic", category: "Hardware", extension: ".md" },
@@ -45,6 +47,12 @@ function createFiles(element, array) {
 
 function makeDraggable(element) {
     let initialX = 0, initialY = 0;
+
+    element.addEventListener("mousedown", (e) => {
+        if (e.target.closest(".window-buttons")) return;
+        highestZ += 1;
+        element.style.zIndex = highestZ;
+    });
     
     const header = element.querySelector(".window-header");
     if (header) {
@@ -54,10 +62,16 @@ function makeDraggable(element) {
     }
 
     function dragMouseDown(e) {
+
+        if (e.target.closest(".window-buttons")) return;
+
         e.preventDefault();
         initialX = e.clientX;
         initialY = e.clientY;
-            
+
+        // highestZ ++;
+        // element.style.zIndex = highestZ;
+        
         document.onmouseup = stopDragging;
         document.onmousemove = elementDrag;
     }
@@ -80,6 +94,7 @@ function makeDraggable(element) {
     function stopDragging() {
         document.onmouseup = null;
         document.onmousemove = null;
+        e.style.zIndex = "99";
     }
 }
 

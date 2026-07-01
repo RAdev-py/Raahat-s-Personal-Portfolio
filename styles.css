@@ -111,5 +111,15 @@ body {
 .window-buttons {
     display: flex;
     gap: 4px;
+}
+
+.window-buttons span {
+    padding: 2px;
+    border-radius: 25%;
+    transition: background-color 0.1s ease;
     cursor: pointer;
+}
+
+.window-buttons span:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }
