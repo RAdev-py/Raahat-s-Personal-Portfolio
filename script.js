@@ -1,15 +1,15 @@
 let highestZ = 10;
 
 const fileSystem = {
-    projects: [
-        { name: "3x3_Macropad_Schematic", category: "Hardware", extension: ".md", url: "./macropad.html" },
-        { name: "Privilege_Escalation_Notes", category: "Cybersecurity", extension: ".md", url:"./priv_esc.html" }
+    Digital_Art: [
+        { name: "Photoshop", category: "Art", extension: ".md", url: "./videos/demo.mp4" },
+        { name: "Blender", category: "Art", extension: ".md", url:"./markdown/BPCS.md" }
     ],
-    hardware: [
-        { name: "PCB_Traces_V2", category: "Engineering", extension: ".kicad_pcb" },
+    Hardware: [
+        { name: "PCB_Traces_V2", category: "Engineering", extension: ".png", url:"./images/capybara.png" },
         { name: "Bill_of_Materials", category: "Planning", extension: ".csv" }
     ],
-    roblox: [
+    Roblox: [
         { name: "Backflip", category: "Animation", extension: ".mov" },
         { name: "Haunted_House", category: "Build", extension: ".rblx" }
     ],
@@ -35,11 +35,21 @@ function createFiles(element, array) {
 
     array.forEach((file) => { 
         const fileRow = document.createElement("div");
-        fileRow.style.cssText = "display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid black; cursor: pointer;";
+        fileRow.style.cssText = `
+            display: flex; 
+            justify-content: space-between; 
+            padding: 5px; 
+            border-bottom: 1px solid black; 
+            cursor: pointer;
+        `;
         
         fileRow.innerHTML = `
-            <span>📄 ${file.name}${file.extension}</span>
-            <span>${file.category}</span>
+            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px;">
+                📄 ${file.name}${file.extension}
+            </span>
+            <span style="white-space: nowrap; flex-shrink: 0;">
+                ${file.category}
+            </span>
         `;
 
         fileRow.addEventListener("mouseover", () => fileRow.style.backgroundColor = "#eee");
@@ -58,7 +68,83 @@ function createFiles(element, array) {
             clon.style.zIndex = highestZ;
             
             clon.querySelector(".app-title").textContent = file.name;
-            clon.querySelector(".app-iframe").src = file.url;
+
+            const iframe = clon.querySelector(".app-iframe");
+
+            if (file.extension == ".md") {
+                fetch(file.url)
+                    .then(response => response.text())
+                    .then(markdownText => {
+                        const htmlContent = marked.parse(markdownText);
+                        const styledHTML = `
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <style>
+                                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; color: #333; padding: 20px; }
+                                    h1, h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 24px; }
+                                    code { background-color: #f6f8fa; padding: 0.2em 0.4em; border-radius: 6px; font-family: monospace; font-size: 0.9em; }
+                                    pre { background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; }
+                                    pre code { background-color: transparent; padding: 0; }
+                                    blockquote { border-left: 4px solid #dfe2e5; color: #6a737d; padding: 0 1em; margin-left: 0; }
+                                    img { max-width: 100%; border-radius: 6px; }
+                                </style>
+
+                                <script>
+                                    MathJax = {
+                                        tex: {
+                                            inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+                                            displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]
+                                        }
+                                    };
+                                </script>
+                                <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+                            </head>
+                            <body>
+                                ${htmlContent}
+                            </body>
+                            </html>
+                        `;
+
+                        iframe.srcdoc = styledHTML;
+                    })
+                    .catch(error => {
+                        iframe.srcdoc = `
+                        <html>
+                            <body style='font-family:sans-serif; padding:20px;'>
+                                <h3>Error loading Markdown file.</h3>
+                                <p>Make sure the file exists and you are running this on a live server (like GitHub Pages).</p>
+                            </body>
+                        </html>`;
+                    });
+            } else if ([".png", ".jpg", ".jpeg", ".gif", ".webp"].includes(file.extension)) {
+                const photoHTML = `
+                    <!DOCTYPE html>
+                    <html style="height: 100%; margin: 0;">
+                    <body style="margin: 0; height: 100%; background-color: #1a1a1a; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                        <img src="${file.url}" style="max-width: 95%; max-height: 95%; object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-radius: 4px;">
+                    </body>
+                    </html>
+                `;
+                iframe.srcdoc = photoHTML;
+
+            } else if ([".mp4", ".webm", ".mov"].includes(file.extension)) {
+                const videoHTML = `
+                    <!DOCTYPE html>
+                    <html style="height: 100%; margin: 0;">
+                    <body style="margin: 0; height: 100%; background-color: #000; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                        <video controls autoplay style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            <source src="${file.url}">
+                            Your browser does not support HTML5 video.
+                        </video>
+                    </body>
+                    </html>
+                `;
+                iframe.srcdoc = videoHTML;
+
+            } else {
+                iframe.src = file.url;
+            }
 
             document.body.appendChild(clon);
             centerWindow(clon); 
