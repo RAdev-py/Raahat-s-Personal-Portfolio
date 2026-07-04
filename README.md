@@ -1,6 +1,6 @@
 # Raahat's Web OS Portfolio
 
-An interactive, window-based Operating System built entirely in vanilla web technologies to showcase engineering, game development, and digital art projects.
+This is a personal portfolio site where I'll be showcasing all my past work/projects as well as any future projects. I'm very proud of what I was able to put together. I wanted to make it in the style of a personal OS after seeing all the other cool projects on Stardance. I'm looking forward to updating this as I learn more and more. Of course disclaimer, Gemini helped me with styling and debugging my javascript. It's been a really long time since I touched either.
 
 ![Web OS Desktop Preview](./images/preview.png) 
 
