@@ -4,7 +4,7 @@ An interactive, window-based Operating System built entirely in vanilla web tech
 
 ![Web OS Desktop Preview](./images/preview.png) 
 
-**[Try the Live Demo Here](https://github.com/RAdev-py/Raahat-s-Personal-Portfolio)**
+**[Try the Live Demo Here](https://radev-py.github.io/Raahat-s-Personal-Portfolio/)**
 
 ## Quick Start
 
