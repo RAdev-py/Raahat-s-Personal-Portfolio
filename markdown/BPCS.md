@@ -54,28 +54,6 @@ The **Info** tab displays statistics about the loaded vessel image:
 The **Bit Plane** tab lets you visualise the vessel image's bit plane decomposition. Select a colour channel (R, G, or B) and a bit plane level (0–7) to see the corresponding binary image. This is useful for understanding which regions the encoder identifies as complex.
 
 ---
-### Presentation:
-
-- **Video:** [Link to presentation video](https://drive.google.com/drive/folders/10WI7H8rFBHyrdDUQvSN0Gj_hiR-UTwFd?usp=sharing)
-- **Presentation:** [PRESENTATION.md](PRESENTATION.md)
-
----
-### Resources/ References:
-
-- Kawaguchi, E. & Eason, R. O. (1998). *Principle and Applications of BPCS Steganography.* SPIE International Symposium on Voice, Video and Data Communications.
-- Srinivasan, Y. (2003). *High Capacity Data Hiding System Using BPCS Steganography.* Master's thesis, Texas Tech University.
-- Gonzalez, R. C. & Woods, R. E. (2002). *Digital Image Processing* (2nd ed.). Pearson Education.
-- [Processing Foundation](https://processing.org) — programming environment and documentation
-- [Wikipedia: Gray code](https://en.wikipedia.org/wiki/Gray_code)
-- [Wikipedia: Peak signal-to-noise ratio](https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio)
-- [Wikipedia: Steganography](https://en.wikipedia.org/wiki/Steganography)
-
-
-# BPCS Steganography
-### Bit-Plane Complexity Segmentation
-**Naveed Razzaque & Raahat Amin**
-
----
 
 ## BPCS in a Nutshell
 
@@ -202,3 +180,15 @@ The recovered file is **bit-for-bit identical** to the original.
 | Conjugation | Flip simple payload blocks to be complex; record which ones |
 | Reassembly | Rebuild image, convert back to standard binary |
 | Decoding | Reverse the whole process using the same complexity map |
+
+---
+
+### Resources/ References:
+
+- Kawaguchi, E. & Eason, R. O. (1998). *Principle and Applications of BPCS Steganography.* SPIE International Symposium on Voice, Video and Data Communications.
+- Srinivasan, Y. (2003). *High Capacity Data Hiding System Using BPCS Steganography.* Master's thesis, Texas Tech University.
+- Gonzalez, R. C. & Woods, R. E. (2002). *Digital Image Processing* (2nd ed.). Pearson Education.
+- [Processing Foundation](https://processing.org) — programming environment and documentation
+- [Wikipedia: Gray code](https://en.wikipedia.org/wiki/Gray_code)
+- [Wikipedia: Peak signal-to-noise ratio](https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio)
+- [Wikipedia: Steganography](https://en.wikipedia.org/wiki/Steganography)

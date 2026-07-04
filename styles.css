@@ -4,6 +4,10 @@ body {
     height: 100vh; 
     margin: 0; 
     overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .os-top-bar {

@@ -2,22 +2,31 @@ let highestZ = 10;
 
 const fileSystem = {
     Digital_Art: [
-        { name: "Photoshop", category: "Art", extension: ".md", url: "./videos/demo.mp4" },
-        { name: "Blender", category: "Art", extension: ".md", url:"./markdown/BPCS.md" }
+        { name: "Graduation Icon", category: "Blender", extension: ".png", url: "./images/Digital_Art/Blender/Grad_Icon.png" },
+        { name: "The Card Players", category: "Photoshop", extension: ".md", url: "./markdown/The_Card_Players.md" },
+        { name: "Water Well", category: "Blender", extension: ".png", url:"./images/Digital_Art/Blender/Water_well.png" },
+        { name: "Underarmour", category: "Photoshop", extension: ".md", url:"./markdown/Underarmour.md" },
+        { name: "Low Poly Wolf", category: "Blender", extension: ".png", url:"./images/Digital_Art/Blender/Wolf_body.png" },
+        { name: "Mini Sand World", category: "Photoshop", extension: ".png", url:"./images/Digital_Art/Photoshop/Mini_Sand_World.png" },
+        { name: "Low Poly Car", category: "Blender", extension: ".png", url:"./images/Digital_Art/Blender/Car.png" },
+        { name: "Treasure Chest", category: "Blender", extension: ".png", url:"./images/Digital_Art/Blender/Treasure_chest.png" },
+        { name: "Seawolf Emblem", category: "Blender", extension: ".png", url:"./images/Digital_Art/Blender/Seawolf_emblem.png" }
+
+
     ],
-    Hardware: [
-        { name: "PCB_Traces_V2", category: "Engineering", extension: ".png", url:"./images/capybara.png" },
-        { name: "Bill_of_Materials", category: "Planning", extension: ".csv" }
+    Game_Dev: [
+        { name: "Haunted Museum", category: "Game Log", extension: ".md", url:"./markdown/Haunted_Museum.md" },
+        { name: "Waffles", category: "Build", extension: ".md", url:"./markdown/Waffles.md" },
+        { name: "Wanted Poster", category: "Build", extension: ".md", url:"./markdown/Wanted_Poster.md" },
+        { name: "Avatar GFX", category: "Art", extension: ".md", url:"./markdown/Avatar_GFX.md" },
+        { name: "Bezier Curves", category: "Scripting", extension: ".md", url:"./markdown/Bezier_Curves.md" },
+        { name: "First Person Roll Animation", category: "Animation", extension: ".md", url:"./markdown/Roll_Animation.md" }
     ],
-    Roblox: [
-        { name: "Backflip", category: "Animation", extension: ".mov" },
-        { name: "Haunted_House", category: "Build", extension: ".rblx" }
-    ],
-    Zayd: [
-        { name: "Backflip", category: "Animation", extension: ".mov" },
-        { name: "Haunted_House", category: "Build", extension: ".rblx" }
+    CS_Projects: [
+        { name: "BPCS", category: "Cybersecurity", extension: ".md", url:"./markdown/BPCS.md" }
     ]
 };
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const testWindow = document.getElementById("projects-window");
@@ -72,6 +81,8 @@ function createFiles(element, array) {
             const iframe = clon.querySelector(".app-iframe");
 
             if (file.extension == ".md") {
+                clon.style.width = "600px";
+                clon.style.height = "700px";
                 fetch(file.url)
                     .then(response => response.text())
                     .then(markdownText => {
@@ -122,11 +133,36 @@ function createFiles(element, array) {
                     <!DOCTYPE html>
                     <html style="height: 100%; margin: 0;">
                     <body style="margin: 0; height: 100%; background-color: #1a1a1a; display: flex; justify-content: center; align-items: center; overflow: hidden;">
-                        <img src="${file.url}" style="max-width: 95%; max-height: 95%; object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-radius: 4px;">
+                        <img src="${file.url}" style="max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px;">
                     </body>
                     </html>
                 `;
                 iframe.srcdoc = photoHTML;
+
+                const img = new Image();
+                img.onload = () => {
+                    const titleBarHeight = 35;
+                    const maxWidth = window.innerWidth * 0.5;
+                    const maxHeight = window.innerHeight * 0.5;
+                    
+                    let finalW = img.width;
+                    let finalH = img.height;
+                    
+                    if (finalW > maxWidth || finalH > (maxHeight - titleBarHeight)) {
+                        const ratio = Math.min(maxWidth / finalW, (maxHeight - titleBarHeight) / finalH);
+                        finalW *= ratio;
+                        finalH *= ratio;
+                    }
+                    
+                    finalW = Math.max(finalW, 300);
+                    finalH = Math.max(finalH, 200);
+                    
+                    clon.style.width = finalW + "px";
+                    clon.style.height = (finalH + titleBarHeight) + "px";
+                    centerWindow(clon);
+                };
+
+                img.src = file.url;
 
             } else if ([".mp4", ".webm", ".mov"].includes(file.extension)) {
                 const videoHTML = `
